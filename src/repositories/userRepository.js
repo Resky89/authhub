@@ -1,4 +1,3 @@
-
 /**
  * @fileoverview Authentication Repository Layer
  * @description Handles database operations for user-profile-related functions
@@ -22,6 +21,10 @@ export class UserRepository {
 
   static async update(userId, userData) {
     try {
+      if (!userData || typeof userData !== 'object') {
+        throw new Error('Invalid update data provided');
+      }
+
       const userRef = db.collection('users').doc(userId);
       const updateData = {
         ...userData,
@@ -32,9 +35,21 @@ export class UserRepository {
         delete updateData.password;
       }
       
-      await userRef.update(updateData);
+      const writeResult = await userRef.update(updateData);
+      if (!writeResult.writeTime) {
+        throw new Error('Update operation failed');
+      }
       
       const updatedUser = await this.findUser(userId);
+      
+      const hasChanges = Object.keys(userData).some(key => 
+        userData[key] !== undefined && updatedUser[key] === userData[key]
+      );
+      
+      if (!hasChanges) {
+        throw new Error('Data was not updated successfully');
+      }
+      
       return updatedUser;
     } catch (error) {
       throw new Error(`Error update user: ${error.message}`);
