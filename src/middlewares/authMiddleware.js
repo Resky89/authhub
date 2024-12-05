@@ -14,7 +14,7 @@ export const authMiddleware = {
       }
 
       const token = authHeader.split(' ')[1];
-      const decoded = JWTUtils.verifyToken(token);
+      const decoded = JWTUtils.verifyAccessToken(token);
       
       req.user = decoded;
       next();
@@ -66,3 +66,9 @@ export const authMiddleware = {
     }
   }
 };
+
+export const verifyToken = authMiddleware.verifyToken;
+export const validateLogin = authMiddleware.validateLogin;
+export const validateRegister = authMiddleware.validateRegister;
+
+export default authMiddleware;
