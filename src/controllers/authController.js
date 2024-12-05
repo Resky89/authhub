@@ -23,7 +23,39 @@ export class AuthController {
     }
   }
 
-
+static async login(req, res) {
+    try {
+      const validatedData = validate(ValidationSchemas.login, req.body);
+      const { email, password } = validatedData;
+      
+      const { user, accessToken, refreshToken } = await AuthService.loginUser(email, password);
+      
+      res.json({
+        status: true,
+        message: 'Login successful',
+        data: {
+          accessToken,
+          refreshToken,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email
+          }
+        }
+      });
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        return res.status(400).json({
+          status: false,
+          error: error.errors
+        });
+      }
+      res.status(401).json({ 
+        status: false,
+        error: error.message 
+      });
+    }
+  }
 
   static async refreshToken(req, res) {
     try {
