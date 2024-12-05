@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Authentication Repository Layer
+ * @description Handles database operations for user-profile-related functions
+ * @requires ../config/config
+ */
+
 import db from '../config/config.js';
 
 export class UserRepository {
