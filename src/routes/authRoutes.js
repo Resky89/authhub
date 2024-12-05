@@ -12,7 +12,7 @@ import {loginLimiter,registerLimiter,refreshTokenLimiter} from "../middlewares/r
 const router = Router();
 
 router.post("/auth/register",validateRegister,registerLimiter,AuthController.register);
-router.post("/auth/login", validateLogin, loginLimiter, AuthController.login);
+
 router.post("/auth/refresh-token",refreshTokenLimiter, AuthController.refreshToken);
 router.post("/auth/logout", verifyToken, AuthController.logout);
 
