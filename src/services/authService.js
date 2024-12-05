@@ -25,29 +25,6 @@ export class AuthService {
     }
   }
 
-   static async loginUser(email, password) {
-    try {
-      const user = await AuthRepository.findUserByEmail(email);
-      if (!user) {
-        throw new Error("Invalid email or password");
-      }
-
-      const isPasswordValid = await AuthRepository.validatePassword(password, user.password);
-      if (!isPasswordValid) {
-        throw new Error("Invalid email or password");
-      }
-
-      const accessToken = JWTUtils.generateAccessToken(user.id);
-      const refreshToken = JWTUtils.generateRefreshToken(user.id);
-
-      await AuthRepository.saveRefreshToken(user.id, refreshToken);
-
-      return { accessToken, refreshToken, user };
-    } catch (error) {
-      throw new Error(`Login error: ${error.message}`);
-    }
-  }
-
   static async refreshAccessToken(refreshToken) {
     const payload = JWTUtils.verifyRefreshToken(refreshToken);
     if (!payload) {
