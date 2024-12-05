@@ -5,11 +5,11 @@ export class UserRepository {
     try {
       const doc = await db.collection('users').doc(userId).get();
       if (!doc.exists) {
-        throw new Error('User tidak ditemukan');
+        throw new Error('User Not Found');
       }
       return { id: doc.id, ...doc.data() };
     } catch (error) {
-      throw new Error(`Error mencari user: ${error.message}`);
+      throw new Error(`Error Find user: ${error.message}`);
     }
   }
 
