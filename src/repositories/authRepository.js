@@ -12,7 +12,7 @@ export class AuthRepository {
 
    static async validatePassword(inputPassword, hashedPassword) {
     return await bcrypt.compare(inputPassword, hashedPassword);
-  },
+  }
 
   static async saveRefreshToken(userId, refreshToken) {
     const hashedToken = await bcrypt.hash(refreshToken, 10);
